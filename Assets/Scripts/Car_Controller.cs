@@ -19,12 +19,15 @@ public class Car_Controller : MonoBehaviour
     [SerializeField] private float _torque = 3000f;
     [SerializeField] private float _torqueStop = 0f;
 
+    [SerializeField] private Joystick _joystick;
+
 
     private void FixedUpdate()
     {
         _colliderFL.motorTorque = -Input.GetAxis("Vertical")*_force;
         _colliderFR.motorTorque = -Input.GetAxis("Vertical")*_force;
-
+        _colliderFL.motorTorque = -_joystick.Vertical*_force;
+        _colliderFR.motorTorque = -_joystick.Vertical*_force;
         if (Input.GetKey(KeyCode.Space))
         {
             _colliderFL.brakeTorque = _torque;
@@ -42,6 +45,8 @@ public class Car_Controller : MonoBehaviour
         }
         _colliderFL.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
         _colliderFR.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
+        _colliderFL.steerAngle = _joystick.Horizontal * _maxAngle;
+        _colliderFR.steerAngle = _joystick.Horizontal * _maxAngle;
         RotateWheel(_colliderFL, _transformFL);
         RotateWheel(_colliderFR, _transformFR);
         RotateWheel(_colliderBL, _transformBL);
