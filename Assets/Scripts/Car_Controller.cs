@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Car_Controller : MonoBehaviour
 {
@@ -15,34 +16,29 @@ public class Car_Controller : MonoBehaviour
     [SerializeField] private WheelCollider _colliderBL;
 
     [SerializeField] private float _force;
-    [SerializeField]private float _maxAngle;
+    [SerializeField] private float _maxAngle;
     [SerializeField] private float _torque = 3000f;
     [SerializeField] private float _torqueStop = 0f;
 
     [SerializeField] private Joystick _joystick;
-
-
     private void FixedUpdate()
     {
-        _colliderFL.motorTorque = -Input.GetAxis("Vertical")*_force;
-        _colliderFR.motorTorque = -Input.GetAxis("Vertical")*_force;
-        _colliderFL.motorTorque = -_joystick.Vertical*_force;
-        _colliderFR.motorTorque = -_joystick.Vertical*_force;
-        if (Input.GetKey(KeyCode.Space))
-        {
-            _colliderFL.brakeTorque = _torque;
-            _colliderFR.brakeTorque = _torque;
-            _colliderBL.brakeTorque = _torque;
-            _colliderBR.brakeTorque = _torque;
+        _colliderFL.motorTorque = -Input.GetAxis("Vertical") * _force;
+        _colliderFR.motorTorque = -Input.GetAxis("Vertical") * _force;
+        _colliderFL.motorTorque = -_joystick.Vertical * _force;
+        _colliderFR.motorTorque = -_joystick.Vertical * _force;
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    BrakeFunc();
 
-        }
-        else
-        {
-            _colliderFL.brakeTorque = _torqueStop;
-            _colliderFR.brakeTorque = _torqueStop;
-            _colliderBL.brakeTorque = _torqueStop;
-            _colliderBR.brakeTorque = _torqueStop;
-        }
+        //}
+        //else
+        //{
+        //    _colliderFL.brakeTorque = _torqueStop;
+        //    _colliderFR.brakeTorque = _torqueStop;
+        //    _colliderBL.brakeTorque = _torqueStop;
+        //    _colliderBR.brakeTorque = _torqueStop;
+        //}
         _colliderFL.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
         _colliderFR.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
         _colliderFL.steerAngle = _joystick.Horizontal * _maxAngle;
@@ -52,7 +48,7 @@ public class Car_Controller : MonoBehaviour
         RotateWheel(_colliderBL, _transformBL);
         RotateWheel(_colliderBR, _transformBR);
     }
-    private void RotateWheel(WheelCollider collider,Transform transform)
+    private void RotateWheel(WheelCollider collider, Transform transform)
     {
         Vector3 position;
         Quaternion rotation;
@@ -60,6 +56,20 @@ public class Car_Controller : MonoBehaviour
         collider.GetWorldPose(out position, out rotation);
         transform.rotation = rotation;
         transform.position = position;
+    }
+    public void Brake()
+    {
+        _colliderFL.brakeTorque = _torque;
+        _colliderFR.brakeTorque = _torque;
+        _colliderBL.brakeTorque = _torque;
+        _colliderBR.brakeTorque = _torque;
+    }
+    public void releaseTheBrake()
+    {
+        _colliderFL.brakeTorque = _torqueStop;
+        _colliderFR.brakeTorque = _torqueStop;
+        _colliderBL.brakeTorque = _torqueStop;
+        _colliderBR.brakeTorque = _torqueStop;
     }
 }
 
