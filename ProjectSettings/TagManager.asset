@@ -4,22 +4,23 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Brake
+  - Car
+  - ResetDriftCollision
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Brake
+  - 
   - Water
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Car
+  - Road
+  - BrakingGround
+  - Metal
+  - Rubber
+  - FinishZone
   - 
   - 
   - 

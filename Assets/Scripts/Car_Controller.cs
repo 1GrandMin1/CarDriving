@@ -15,34 +15,59 @@ public class Car_Controller : MonoBehaviour
     [SerializeField] private WheelCollider _colliderBR;
     [SerializeField] private WheelCollider _colliderBL;
 
-    [SerializeField] private float _force;
+    [SerializeField] private float _forceForward;
+    [SerializeField] private float _forceBack;
+    [SerializeField] private float _forceCurrent;
+    [SerializeField] private float _forceDefault;
     [SerializeField] private float _maxAngle;
+    private float _defAngle = 0f;
     [SerializeField] private float _torque = 3000f;
     [SerializeField] private float _torqueStop = 0f;
 
+
     [SerializeField] private Joystick _joystick;
+
+
     private void FixedUpdate()
     {
-        _colliderFL.motorTorque = -Input.GetAxis("Vertical") * _force;
-        _colliderFR.motorTorque = -Input.GetAxis("Vertical") * _force;
-        _colliderFL.motorTorque = -_joystick.Vertical * _force;
-        _colliderFR.motorTorque = -_joystick.Vertical * _force;
-        //if (Input.GetKey(KeyCode.Space))
-        //{
-        //    BrakeFunc();
+        
+        if (_joystick.Vertical > 0.1f)
+        {
+            _forceCurrent = Mathf.Lerp(_forceCurrent, _forceForward, 10);
+            _colliderFL.motorTorque = -_joystick.Vertical * _forceCurrent;
+            _colliderFR.motorTorque = -_joystick.Vertical * _forceCurrent;    
+        }
+        else if (_joystick.Vertical < -0.1f)
+        {
+            _forceCurrent = Mathf.Lerp(_forceCurrent, _forceBack, 10);
 
-        //}
-        //else
-        //{
-        //    _colliderFL.brakeTorque = _torqueStop;
-        //    _colliderFR.brakeTorque = _torqueStop;
-        //    _colliderBL.brakeTorque = _torqueStop;
-        //    _colliderBR.brakeTorque = _torqueStop;
-        //}
-        _colliderFL.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
-        _colliderFR.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
-        _colliderFL.steerAngle = _joystick.Horizontal * _maxAngle;
-        _colliderFR.steerAngle = _joystick.Horizontal * _maxAngle;
+            _colliderFL.motorTorque = -_joystick.Vertical * _forceCurrent;
+            _colliderFR.motorTorque = -_joystick.Vertical * _forceCurrent; 
+        }
+        else
+        {
+            _forceCurrent = Mathf.Lerp(_forceCurrent, _forceDefault, 10);
+
+            _colliderFL.motorTorque = -_joystick.Vertical * _forceCurrent;
+            _colliderFR.motorTorque = -_joystick.Vertical * _forceCurrent;
+
+        }
+        if (_joystick.Horizontal > 0.1f)
+        {          
+            _colliderFL.steerAngle = _joystick.Horizontal * _maxAngle;
+            _colliderFR.steerAngle = _joystick.Horizontal * _maxAngle;
+        }
+        else if (_joystick.Horizontal < -0.1f)
+        {
+            _colliderFL.steerAngle = _joystick.Horizontal * _maxAngle;
+            _colliderFR.steerAngle = _joystick.Horizontal * _maxAngle;
+        }
+        else
+        {
+            _colliderFL.steerAngle = _joystick.Horizontal * _defAngle;
+            _colliderFR.steerAngle = _joystick.Horizontal * _defAngle;
+        }
+
         RotateWheel(_colliderFL, _transformFL);
         RotateWheel(_colliderFR, _transformFR);
         RotateWheel(_colliderBL, _transformBL);
