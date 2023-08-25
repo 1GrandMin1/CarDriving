@@ -24,12 +24,14 @@ public class Car_Controller : MonoBehaviour
     [SerializeField] private float _torque = 3000f;
     [SerializeField] private float _torqueStop = 0f;
 
+  
 
     [SerializeField] private Joystick _joystick;
 
-
+   
     private void FixedUpdate()
     {
+       
         
         if (_joystick.Vertical > 0.1f)
         {
